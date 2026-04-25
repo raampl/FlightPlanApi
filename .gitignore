@@ -1,0 +1,25 @@
+# Build results
+bin/
+obj/
+
+# IDE
+.idea/
+.vs/
+*.user
+*.suo
+
+# NuGet
+packages/
+*.nupkg
+
+# .NET
+*.dll
+*.pdb
+*.exe
+
+# Logs
+*.log
+
+# Environment
+.env
+*.local
