@@ -5,8 +5,11 @@ obj/
 # IDE
 .idea/
 .vs/
+.vscode/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
 # NuGet
 packages/
@@ -23,3 +26,30 @@ packages/
 # Environment
 .env
 *.local
+appsettings.*.json
+
+# Rider
+.idea/
+
+# User-specific files
+*.rsuser
+*.userprefs
+*.userprefs-ms
+
+# Visual Studio
+.vs/
+*(:[^/]*).user
+*(:[^/]*).userosscache
+*(:[^/]*).sln.docstates
+
+# Mono
+*.mdb
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Bb]/
+[Ll]og/
+[Ll]ogs/
