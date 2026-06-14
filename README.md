@@ -10,6 +10,7 @@ dotnet run --profile https
 
 The API will be available at:
 - **HTTP**: `http://localhost:5250`
+- **HTTP - Swagger**: `http://localhost:5250/swagger/index.html`
 - **HTTPS**: `https://localhost:7001`
 
 ## Swagger
