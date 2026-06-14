@@ -10,12 +10,11 @@ dotnet run --profile https
 
 The API will be available at:
 - **HTTP**: `http://localhost:5250`
-- **HTTP - Swagger**: `http://localhost:5250/swagger/index.html`
 - **HTTPS**: `https://localhost:7001`
 
 ## Swagger
 
-Access Swagger UI at `https://localhost:7001/swagger`
+Access Swagger UI at `https://localhost:7001/swagger` or `http://localhost:5250/swagger/index.html`
 
 ## API Endpoints
 
@@ -24,6 +23,12 @@ Access Swagger UI at `https://localhost:7001/swagger`
 ## Development
 
 ```bash
+# Start Mango db
+brew services start mongodb/brew/mongodb-community
+
+# Stop Mango db
+brew services stop mongodb/brew/mongodb-community
+
 # Build
 dotnet build
 
