@@ -12,7 +12,7 @@ namespace FlightPlanApi.Controllers
     public class FlightPlanController : ControllerBase
     {
         private readonly ILogger<FlightPlanController> _logger;
-        private IDatabaseAdapter _database;
+        private readonly IDatabaseAdapter _database;
 
         public FlightPlanController(ILogger<FlightPlanController> logger, IDatabaseAdapter database)
         {
@@ -37,9 +37,9 @@ namespace FlightPlanApi.Controllers
         [HttpGet]
         [Authorize]
         [Route("{flightPlanId}")]
-        public async Task<IActionResult> GetFlightFlightPlanById(string flightPlanId)
+        public async Task<IActionResult> GetFlightPlanById(string flightPlanId)
         {
-            var flightPlan = await _database.GetFlightPlanById(flightPlanId);
+            var flightPlan = await GetFlightPlanEntity(flightPlanId);
 
             if (flightPlan is null)
             {
@@ -124,9 +124,9 @@ namespace FlightPlanApi.Controllers
         [Route("airport/departure/{flightPlanId}")]
         public async Task<IActionResult> GetFlightPlanDepartureAirport(string flightPlanId)
         {
-            var flightPlan = await _database.GetFlightPlanById(flightPlanId);
-            
-            if (flightPlan == null)
+            var flightPlan = await GetFlightPlanEntity(flightPlanId);
+
+            if (flightPlan is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
@@ -139,7 +139,7 @@ namespace FlightPlanApi.Controllers
         [Route("route/{flightPlanId}")]
         public async Task<IActionResult> GetFlightPlanRoute(string flightPlanId)
         {
-            var flightPlan = await _database.GetFlightPlanById(flightPlanId);
+            var flightPlan = await GetFlightPlanEntity(flightPlanId);
 
             if (flightPlan is null)
             {
@@ -154,15 +154,21 @@ namespace FlightPlanApi.Controllers
         [Route("time/enroute/{flightPlanId}")]
         public async Task<IActionResult> GetFlightPlanTimeEnroute(string flightPlanId)
         {
-            var flightPlan = await _database.GetFlightPlanById(flightPlanId);
-            if (flightPlan == null)
+            var flightPlan = await GetFlightPlanEntity(flightPlanId);
+
+            if (flightPlan is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-            
+
             var estimatedTimeEnroute = flightPlan.ArrivalTime - flightPlan.DepartureTime;
 
             return Ok(estimatedTimeEnroute);
+        }
+
+        private async Task<FlightPlan?> GetFlightPlanEntity(string flightPlanId)
+        {
+            return await _database.GetFlightPlanById(flightPlanId);
         }
     }
 }

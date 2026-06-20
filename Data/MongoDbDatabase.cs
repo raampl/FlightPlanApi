@@ -1,4 +1,4 @@
-using System.Linq;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using FlightPlanApi.Models;
@@ -7,18 +7,26 @@ namespace FlightPlanApi.Data
 {
     public class MongoDbDatabase : IDatabaseAdapter
     {
+        private readonly IMongoCollection<BsonDocument> _collection;
+
+        public MongoDbDatabase(IOptions<MongoDbOptions> options)
+        {
+            var mongoOptions = options.Value;
+            var client = new MongoClient(mongoOptions.ConnectionString);
+            var database = client.GetDatabase(mongoOptions.DatabaseName);
+            _collection = database.GetCollection<BsonDocument>(mongoOptions.CollectionName);
+        }
+
         public async Task<List<FlightPlan>> GetAllFlightPlans()
         {
-            var collection = GetCollection("pluralsight", "flight_plans");
-            var documents = await collection.Find(_ => true).ToListAsync();
+            var documents = await _collection.Find(_ => true).ToListAsync();
 
             return documents?.Select(ConvertBsonToFlightPlan).OfType<FlightPlan>().ToList() ?? [];
         }
 
         public async Task<FlightPlan?> GetFlightPlanById(string flightPlanId)
         {
-            var collection = GetCollection("pluralsight", "flight_plans");
-            var document = await collection.Find(
+            var document = await _collection.Find(
                 Builders<BsonDocument>.Filter.Eq("flight_plan_id", flightPlanId)).FirstOrDefaultAsync();
 
             return ConvertBsonToFlightPlan(document);
@@ -26,7 +34,6 @@ namespace FlightPlanApi.Data
 
         public async Task<TransactionResult> FileFlightPlan(FlightPlan flightPlan)
         {
-            var collection = GetCollection("pluralsight", "flight_plans");
 
             var document = new BsonDocument
             {
@@ -49,7 +56,7 @@ namespace FlightPlanApi.Data
 
             try
             {
-                await collection.InsertOneAsync(document);
+                await _collection.InsertOneAsync(document);
                 
                 if (document["_id"].IsObjectId)
                 {
@@ -66,8 +73,7 @@ namespace FlightPlanApi.Data
 
         public async Task<bool> DeleteFlightPlanById(string flightPlanId)
         {
-            var collection = GetCollection("pluralsight", "flight_plans");
-            var result = await collection.DeleteOneAsync(
+            var result = await _collection.DeleteOneAsync(
                 Builders<BsonDocument>.Filter.Eq("flight_plan_id", flightPlanId));
 
             return result.DeletedCount > 0;
@@ -75,7 +81,6 @@ namespace FlightPlanApi.Data
 
         public async Task<TransactionResult> UpdateFlightPlan(string flightPlanId, FlightPlan flightPlan)
         {
-            var collection = GetCollection("pluralsight", "flight_plans");
             var filter = Builders<BsonDocument>.Filter.Eq("flight_plan_id", flightPlanId);
             var update = Builders<BsonDocument>.Update
                 .Set("altitude", flightPlan.Altitude)
@@ -91,8 +96,8 @@ namespace FlightPlanApi.Data
                 .Set("remarks", flightPlan.Remarks)
                 .Set("fuel_hours", flightPlan.FuelHours)
                 .Set("fuel_minutes", flightPlan.FuelMinutes)
-                .Set("numberOnBoard", flightPlan.NumberOnBoard);
-            var result = await collection.UpdateOneAsync(filter, update);
+                .Set("number_onboard", flightPlan.NumberOnBoard);
+            var result = await _collection.UpdateOneAsync(filter, update);
 
             if(result.MatchedCount == 0)
             {
@@ -105,15 +110,6 @@ namespace FlightPlanApi.Data
             }
 
             return TransactionResult.ServerError;
-        }
-
-        private IMongoCollection<BsonDocument> GetCollection(
-            string databaseName, string collectionName)
-        {
-            var client = new MongoClient();
-            var database = client.GetDatabase(databaseName);
-            var collection = database.GetCollection<BsonDocument>(collectionName);
-            return collection;
         }
 
         private FlightPlan? ConvertBsonToFlightPlan(BsonDocument document)
