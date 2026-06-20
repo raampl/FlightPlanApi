@@ -33,8 +33,9 @@ namespace FlightPlanApi.Controllers
         [Route("{flightPlanId}")]
         public async Task<IActionResult> GetFlightFlightPlanById(string flightPlanId)
         {
-            var flightPlan = await _database.GetFlightPlanById(flightPlanId); 
-            if (flightPlan.FlightPlanId != flightPlanId)
+            var flightPlan = await _database.GetFlightPlanById(flightPlanId);
+
+            if (flightPlan is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
@@ -47,30 +48,24 @@ namespace FlightPlanApi.Controllers
         public async Task<IActionResult> FileFlightPlan(FlightPlan flightPlan)
         {
             var transactionResult = await _database.FileFlightPlan(flightPlan);
-            switch(transactionResult)
+            return transactionResult switch
             {
-                case TransactionResult.Success:
-                    return Ok();
-                case TransactionResult.BadRequest:
-                    return StatusCode(StatusCodes.Status400BadRequest);
-                default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+                TransactionResult.Success => Ok(),
+                TransactionResult.BadRequest => StatusCode(StatusCodes.Status400BadRequest),
+                _ => StatusCode(StatusCodes.Status500InternalServerError)
+            };
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateFlightPlan(FlightPlan flightPlan)
         {
             var updateResult = await _database.UpdateFlightPlan(flightPlan.FlightPlanId, flightPlan);
-            switch (updateResult)
+            return updateResult switch
             {
-                case TransactionResult.Success:
-                    return Ok();
-                case TransactionResult.NotFound:
-                    return StatusCode(StatusCodes.Status404NotFound);
-                default:
-                    return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+                TransactionResult.Success => Ok(),
+                TransactionResult.NotFound => StatusCode(StatusCodes.Status404NotFound),
+                _ => StatusCode(StatusCodes.Status500InternalServerError)
+            };
         }
 
         [HttpDelete]
@@ -105,7 +100,8 @@ namespace FlightPlanApi.Controllers
         public async Task<IActionResult> GetFlightPlanRoute(string flightPlanId)
         {
             var flightPlan = await _database.GetFlightPlanById(flightPlanId);
-            if (flightPlan.FlightPlanId != flightPlanId)
+
+            if (flightPlan is null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }

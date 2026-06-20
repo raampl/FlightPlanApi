@@ -13,7 +13,6 @@ builder.Services.AddOpenApi();
 // below 2 lines from pluralsight
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDatabaseAdapter, MongoDbDatabase>();
 var app = builder.Build();
 

@@ -1,3 +1,4 @@
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using FlightPlanApi.Models;
@@ -9,34 +10,18 @@ namespace FlightPlanApi.Data
         public async Task<List<FlightPlan>> GetAllFlightPlans()
         {
             var collection = GetCollection("pluralsight", "flight_plans");
-            var documents = collection.Find(_ => true).ToListAsync();
+            var documents = await collection.Find(_ => true).ToListAsync();
 
-            var flightPlanList = new List<FlightPlan>();
-
-            if (documents == null) return flightPlanList;
-
-            foreach (var document in await documents)
-            {
-                flightPlanList.Add(ConvertBsonToFlightPlan(document));
-            }
-
-            return flightPlanList;
+            return documents?.Select(ConvertBsonToFlightPlan).OfType<FlightPlan>().ToList() ?? [];
         }
 
-        public async Task<FlightPlan> GetFlightPlanById(string flightPlanId)
+        public async Task<FlightPlan?> GetFlightPlanById(string flightPlanId)
         {
             var collection = GetCollection("pluralsight", "flight_plans");
-            var flightPlanCursor = await collection.FindAsync(
-                Builders<BsonDocument>.Filter.Eq("flight_plan_id", flightPlanId));
-            var document = flightPlanCursor.FirstOrDefault();
-            var flightPlan = ConvertBsonToFlightPlan(document);
+            var document = await collection.Find(
+                Builders<BsonDocument>.Filter.Eq("flight_plan_id", flightPlanId)).FirstOrDefaultAsync();
 
-            if (flightPlan == null)
-            {
-                return new FlightPlan();
-            }
-
-            return flightPlan;
+            return ConvertBsonToFlightPlan(document);
         }
 
         public async Task<TransactionResult> FileFlightPlan(FlightPlan flightPlan)
@@ -131,7 +116,7 @@ namespace FlightPlanApi.Data
             return collection;
         }
 
-        private FlightPlan ConvertBsonToFlightPlan(BsonDocument document)
+        private FlightPlan? ConvertBsonToFlightPlan(BsonDocument document)
         {
             if (document == null) return null;
 
