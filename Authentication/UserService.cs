@@ -11,11 +11,11 @@ namespace FlightPlanApi.Authentication
             _credentials = credentials.Value;
         }
 
-        public Task<User> Authenticate(string username, string password)
+        public Task<User?> Authenticate(string username, string password)
         {
             if (username != _credentials.Username || password != _credentials.Password)
             {
-                return Task.FromResult<User>(null);
+                return Task.FromResult<User?>(null);
             }
 
             var user = new User
@@ -24,7 +24,7 @@ namespace FlightPlanApi.Authentication
                 Id = Guid.NewGuid().ToString("N")
             };
 
-            return Task.FromResult(user);
+            return Task.FromResult<User?>(user);
         }
     }
 }

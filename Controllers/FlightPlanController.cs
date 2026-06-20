@@ -84,6 +84,12 @@ namespace FlightPlanApi.Controllers
         public async Task<IActionResult> FileFlightPlan(FlightPlan flightPlan)
         {
             ArgumentNullException.ThrowIfNull(flightPlan);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var transactionResult = await _database.FileFlightPlan(flightPlan);
             return transactionResult switch
             {
@@ -98,6 +104,11 @@ namespace FlightPlanApi.Controllers
         public async Task<IActionResult> UpdateFlightPlan(FlightPlan flightPlan)
         {
             ArgumentNullException.ThrowIfNull(flightPlan);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var updateResult = await _database.UpdateFlightPlan(flightPlan.FlightPlanId, flightPlan);
             return updateResult switch
             {
