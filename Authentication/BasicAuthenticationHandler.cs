@@ -15,10 +15,11 @@ namespace FlightPlanApi.Authentication
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock)
+            ISystemClock clock,
+            IUserService userService)
             : base(options, logger, encoder, clock)
         {
-            _userService = new UserService();
+            _userService = userService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()

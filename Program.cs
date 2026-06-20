@@ -51,6 +51,8 @@ builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
     ("BasicAuthentication", null);
 builder.Services.AddScoped<IDatabaseAdapter, MongoDbDatabase>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.Configure<AdminCredentials>(builder.Configuration.GetSection("AdminCredentials"));
 
 var app = builder.Build();
 
