@@ -83,6 +83,7 @@ namespace FlightPlanApi.Controllers
         [Route("file")]
         public async Task<IActionResult> FileFlightPlan(FlightPlan flightPlan)
         {
+            ArgumentNullException.ThrowIfNull(flightPlan);
             var transactionResult = await _database.FileFlightPlan(flightPlan);
             return transactionResult switch
             {
@@ -96,6 +97,7 @@ namespace FlightPlanApi.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateFlightPlan(FlightPlan flightPlan)
         {
+            ArgumentNullException.ThrowIfNull(flightPlan);
             var updateResult = await _database.UpdateFlightPlan(flightPlan.FlightPlanId, flightPlan);
             return updateResult switch
             {

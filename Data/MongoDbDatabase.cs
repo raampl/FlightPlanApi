@@ -8,9 +8,11 @@ namespace FlightPlanApi.Data
     public class MongoDbDatabase : IDatabaseAdapter
     {
         private readonly IMongoCollection<BsonDocument> _collection;
+        private readonly ILogger<MongoDbDatabase> _logger;
 
-        public MongoDbDatabase(IOptions<MongoDbOptions> options)
+        public MongoDbDatabase(IOptions<MongoDbOptions> options, ILogger<MongoDbDatabase> logger)
         {
+            _logger = logger;
             var mongoOptions = options.Value;
             var client = new MongoClient(mongoOptions.ConnectionString);
             var database = client.GetDatabase(mongoOptions.DatabaseName);
@@ -65,8 +67,9 @@ namespace FlightPlanApi.Data
 
                 return TransactionResult.BadRequest;
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to file flight plan.");
                 return TransactionResult.ServerError;
             }
         }

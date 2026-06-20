@@ -28,16 +28,30 @@ namespace FlightPlanApi.Authentication
 
             try
             {
-                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var authHeaderValue = Request.Headers["Authorization"].FirstOrDefault();
+
+                if (string.IsNullOrEmpty(authHeaderValue))
+                {
+                    return AuthenticateResult.Fail("Missing Authorization header.");
+                }
+
+                var authHeader = AuthenticationHeaderValue.Parse(authHeaderValue);
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter ?? string.Empty);
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
+
+                if (credentials.Length < 2)
+                {
+                    return AuthenticateResult.Fail("Invalid authorization header format.");
+                }
+
                 var username = credentials[0];
                 var password = credentials[1];
                 user = await _userService.Authenticate(username, password);
             }
-            catch
+            catch (Exception ex)
             {
-                return AuthenticateResult.Fail("Error Occurred.Authorization failed.");
+                Logger.LogError(ex, "Authorization failed.");
+                return AuthenticateResult.Fail("Authorization failed.");
             }
 
             if (user == null)
