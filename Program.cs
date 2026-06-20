@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
-using FlightPlanApi.Authentication;
-using FlightPlanApi.Configuration;
-using FlightPlanApi.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

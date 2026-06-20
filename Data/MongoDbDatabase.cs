@@ -1,8 +1,3 @@
-using Microsoft.Extensions.Options;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using FlightPlanApi.Models;
-
 namespace FlightPlanApi.Data
 {
     public class MongoDbDatabase : IDatabaseAdapter

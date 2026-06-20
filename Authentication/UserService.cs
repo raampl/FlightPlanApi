@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Options;
-
 namespace FlightPlanApi.Authentication
 {
     public class UserService : IUserService

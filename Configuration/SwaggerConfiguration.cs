@@ -1,7 +1,3 @@
-using System.Reflection;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-
 namespace FlightPlanApi.Configuration;
 
 public static class SwaggerConfiguration

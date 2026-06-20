@@ -1,10 +1,3 @@
-using System.Net;
-using FlightPlanApi.Data;
-using FlightPlanApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Swashbuckle.AspNetCore.Annotations;
-
 namespace FlightPlanApi.Controllers
 {
     [ApiController]
