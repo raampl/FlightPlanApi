@@ -24,7 +24,7 @@ namespace FlightPlanApi.Authentication
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            User user;
+            User? user;
 
             try
             {
