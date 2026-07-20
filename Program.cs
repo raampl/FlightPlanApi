@@ -20,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options => options.SwaggerEndpoint($"/swagger/{SwaggerConfiguration.DocName}/swagger.json", "Flight Plan API"));
 }
+// The below Cors related lines of code should NOT be in PROD
 app.UseCors(config =>
 {
     config
