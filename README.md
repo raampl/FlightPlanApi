@@ -25,8 +25,13 @@ dotnet run --profile https
 ```
 
 The API will be available at:
-- **HTTP**: `http://localhost:5250/swagger/index.html`
-- **HTTPS**: `https://localhost:3001/swagger/index.html`
+- **HTTP**: `http://localhost:5250`
+- **HTTPS**: `https://localhost:3001`
+
+## Swagger
+
+Access Swagger UI at `https://localhost:3001/swagger` or `http://localhost:5250/swagger/index.html`
+
 
 ## Configuration
 
@@ -64,10 +69,6 @@ All endpoints require authentication via the `Authorize` header.
 | `GET` | `/api/v1/flightplan/airport/departure/{flightPlanId}` | Get departure airport |
 | `GET` | `/api/v1/flightplan/route/{flightPlanId}` | Get flight route |
 | `GET` | `/api/v1/flightplan/time/enroute/{flightPlanId}` | Get estimated time enroute |
-
-## Swagger
-
-Access Swagger UI at `https://localhost:3001/swagger` or `http://localhost:5250/swagger/index.html`
 
 ## Development
 
