@@ -26,7 +26,7 @@ dotnet run --profile https
 
 The API will be available at:
 - **HTTP**: `http://localhost:5250/swagger/index.html`
-- **HTTPS**: `http://localhost:7001/swagger/index.html`
+- **HTTPS**: `https://localhost:3001/swagger/index.html`
 
 ## Configuration
 
@@ -46,6 +46,10 @@ The API uses **Basic Authentication**. Include an `Authorization: Basic <base64>
 
 Default credentials: `admin` / `P@ssw0rd`
 
+## CORS
+
+Cross-Origin Resource Sharing is enabled to allow any origin, method, and header (development convenience — should be restricted before production).
+
 ## API Endpoints
 
 All endpoints require authentication via the `Authorize` header.
@@ -63,7 +67,7 @@ All endpoints require authentication via the `Authorize` header.
 
 ## Swagger
 
-Access Swagger UI at `https://localhost:7001/swagger` or `http://localhost:5250/swagger/index.html`
+Access Swagger UI at `https://localhost:3001/swagger` or `http://localhost:5250/swagger/index.html`
 
 ## Development
 
@@ -85,11 +89,12 @@ dotnet run --environment Development
 
 ```
 FlightPlanApi/
-├── Authentication/       # Basic auth handler, user service
+├── Authentication/       # Basic auth handler, user service, admin credentials
 ├── Configuration/        # Swagger setup
 ├── Controllers/          # API controllers
-├── Data/                 # Database adapter, repository
+├── Data/                 # Database adapter, repository, options
 ├── Models/               # Domain models
+├── GlobalUsings.cs       # Global using directives
 ├── Program.cs            # Application entry point
 └── appsettings.json      # Configuration
 ```
