@@ -135,11 +135,16 @@ FlightPlanApi/
 ├── Data/                     # IDatabaseAdapter, MongoDbDatabase, MongoDbOptions, TransactionResult
 ├── Models/                   # FlightPlan (snake_case JSON via JsonPropertyName)
 ├── Properties/               # launchSettings.json (http/https profiles)
+├── docs/                     # Mermaid sequence diagrams (application flow)
 ├── GlobalUsings.cs           # Global using directives
 ├── Program.cs                # Application entry point (DI, Swagger, CORS, auth wiring)
 ├── appsettings.json          # Configuration
 └── appsettings.Development.json
 ```
+
+## Request Flow
+
+See [docs/sequence-diagram.md](docs/sequence-diagram.md) for Mermaid sequence diagrams covering the middleware pipeline, authentication, and each endpoint's controller → `IDatabaseAdapter` → MongoDB path.
 
 ## Test Data
 
